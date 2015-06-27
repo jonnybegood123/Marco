@@ -1,9 +1,13 @@
 package com.jonathanrobins.marco;
 
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 
@@ -17,6 +21,15 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         marcoButton = (Button)findViewById(R.id.marcoButton);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "PlayfairDisplaySC-Bold.ttf");
+        marcoButton.setTypeface(typeface);
+
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.marco);
+        marcoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mp.start();
+            }
+        });
     }
 
     @Override
