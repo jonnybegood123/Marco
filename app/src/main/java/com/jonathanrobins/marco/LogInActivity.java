@@ -12,6 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseUser;
+
+import java.text.ParseException;
 
 
 public class LogInActivity extends ActionBarActivity {
@@ -47,6 +54,9 @@ public class LogInActivity extends ActionBarActivity {
 
         //on click/focus methods
         focusAndOnClickLogic();
+
+        //database
+        Parse.initialize(this, "UqB3jPRcavR8nxYZB1SlXismTfMZyGtBFzDHmBt0", "2WEttFIiHPJ7AzKffCEkXsG81mOxBlZvsq15mnQl");
     }
 
     @Override
@@ -80,8 +90,22 @@ public class LogInActivity extends ActionBarActivity {
         });
         logInButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(LogInActivity.this, MainActivity.class);
-                startActivity(intent);
+                final String username = usernameTextField.getText().toString();
+                final String password = passwordTextField.getText().toString();
+                ParseUser.logInInBackground(username.toLowerCase(), password, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser parseUser, com.parse.ParseException e) {
+                        if (parseUser != null) {
+                            Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "User not found or information was entered incorrectly.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         });
         signUpButton.setOnClickListener(new View.OnClickListener() {

@@ -60,6 +60,7 @@ public class SignUpActivity extends ActionBarActivity {
         focusAndOnClickLogic();
 
         //database
+        Parse.enableLocalDatastore(this);
         Parse.initialize(this, "UqB3jPRcavR8nxYZB1SlXismTfMZyGtBFzDHmBt0", "2WEttFIiHPJ7AzKffCEkXsG81mOxBlZvsq15mnQl");
     }
 
@@ -94,14 +95,30 @@ public class SignUpActivity extends ActionBarActivity {
         });
         signUpButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String username = usernameTextField.getText().toString().trim();
-                String password = passwordTextField.getText().toString();
-                String confirmPassword = confirmPasswordTextField.getText().toString();
+                final String username = usernameTextField.getText().toString();
+                final String password = passwordTextField.getText().toString();
+                final String confirmPassword = confirmPasswordTextField.getText().toString();
                 ParseUser user = new ParseUser();
-                user.setUsername(username);
+                user.setUsername(username.toLowerCase());
                 user.setPassword(password);
                 //sign up info checking
-                if (password.equals(confirmPassword) && !username.contains(" ")){
+                if (!password.equals(confirmPassword)) {
+                    Toast.makeText(getApplicationContext(),
+                            "Password don't match.", Toast.LENGTH_LONG)
+                            .show();
+                } else if (username.contains(" ")) {
+                    Toast.makeText(getApplicationContext(),
+                            "Username cannot contain spaces.", Toast.LENGTH_LONG)
+                            .show();
+                } else if (username.length() < 8) {
+                    Toast.makeText(getApplicationContext(),
+                            "Username must be atleast 8 characters.", Toast.LENGTH_LONG)
+                            .show();
+                } else if (password.length() < 8) {
+                    Toast.makeText(getApplicationContext(),
+                            "Password must be atleast 8 characters.", Toast.LENGTH_LONG)
+                            .show();
+                } else {
                     user.signUpInBackground(new SignUpCallback() {
                         @Override
                         public void done(com.parse.ParseException e) {
@@ -115,7 +132,7 @@ public class SignUpActivity extends ActionBarActivity {
                                 finish();
                             } else {
                                 Toast.makeText(getApplicationContext(),
-                                        "Sign up Error", Toast.LENGTH_LONG)
+                                        "Username is already taken.", Toast.LENGTH_LONG)
                                         .show();
                             }
                         }
