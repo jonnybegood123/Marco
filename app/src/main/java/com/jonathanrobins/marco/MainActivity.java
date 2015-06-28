@@ -9,7 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import com.parse.Parse;
+import com.parse.ParseObject;
 
+import java.sql.Timestamp;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -20,16 +23,25 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
-        marcoButton = (Button)findViewById(R.id.marcoButton);
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "PlayfairDisplaySC-Bold.ttf");
-        marcoButton.setTypeface(typeface);
 
+        //Marco Button logic
+        marcoButton = (Button)findViewById(R.id.marcoButton);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "PlayfairDisplaySC-BoldItalic.ttf");
+        marcoButton.setTypeface(typeface);
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.marco);
         marcoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mp.start();
+
+                java.util.Date date = new java.util.Date();
+                ParseObject testObject = new ParseObject("TestObject");
+                testObject.put("Test", new Timestamp(date.getTime()).toString());
+                testObject.saveInBackground();
             }
         });
+
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, "UqB3jPRcavR8nxYZB1SlXismTfMZyGtBFzDHmBt0", "2WEttFIiHPJ7AzKffCEkXsG81mOxBlZvsq15mnQl");
     }
 
     @Override
