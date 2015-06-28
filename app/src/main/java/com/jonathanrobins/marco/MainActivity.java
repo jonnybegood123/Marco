@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
 
         //Marco Button logic
         marcoButton = (Button)findViewById(R.id.marcoButton);
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "PlayfairDisplaySC-BoldItalic.ttf");
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "PlayfairDisplaySC-Italic.ttf");
         marcoButton.setTypeface(typeface);
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.marco);
         marcoButton.setOnClickListener(new View.OnClickListener() {
