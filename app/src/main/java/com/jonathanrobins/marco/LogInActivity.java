@@ -20,6 +20,7 @@ public class LogInActivity extends ActionBarActivity {
     EditText usernameTextField;
     EditText passwordTextField;
     Button logInButton;
+    Button signUpButton;
     RelativeLayout mainLayout;
 
     @Override
@@ -33,15 +34,16 @@ public class LogInActivity extends ActionBarActivity {
         usernameTextField = (EditText) findViewById(R.id.usernameTextField);
         passwordTextField = (EditText) findViewById(R.id.passwordTextField);
         logInButton = (Button) findViewById(R.id.logInButton);
+        signUpButton = (Button) findViewById(R.id.signUpButton);
+        logInTitle = (TextView) findViewById(R.id.signUpTitle);
 
         //text modifications
         Typeface typeface = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
-        logInTitle = (TextView) findViewById(R.id.logInTitle);
-        logInButton = (Button) findViewById(R.id.logInButton);
         usernameTextField.setTypeface(typeface);
         passwordTextField.setTypeface(typeface);
         logInTitle.setTypeface(typeface);
         logInButton.setTypeface(typeface);
+        signUpButton.setTypeface(typeface);
 
         //on click/focus methods
         focusAndOnClickLogic();
@@ -80,7 +82,12 @@ public class LogInActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LogInActivity.this, MainActivity.class);
                 startActivity(intent);
-                finish();
+            }
+        });
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(LogInActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }
         });
     }
