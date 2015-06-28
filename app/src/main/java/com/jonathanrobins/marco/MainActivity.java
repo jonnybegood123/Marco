@@ -34,8 +34,8 @@ public class MainActivity extends ActionBarActivity {
                 mp.start();
 
                 java.util.Date date = new java.util.Date();
-                ParseObject testObject = new ParseObject("TestObject");
-                testObject.put("Test", new Timestamp(date.getTime()).toString());
+                ParseObject testObject = new ParseObject("Test");
+                testObject.put("Person", "Jonathan Robins");
                 testObject.saveInBackground();
             }
         });
