@@ -20,17 +20,19 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SignUpActivity extends ActionBarActivity {
 
-    TextView signUpTitle;
-    EditText usernameTextField;
-    EditText passwordTextField;
-    EditText confirmPasswordTextField;
-    Button signUpButton;
-    Button logInButton;
-    RelativeLayout mainLayout;
+    private TextView signUpTitle;
+    private EditText usernameTextField;
+    private EditText passwordTextField;
+    private EditText confirmPasswordTextField;
+    private Button signUpButton;
+    private Button logInButton;
+    private RelativeLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,13 @@ public class SignUpActivity extends ActionBarActivity {
         //database
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "UqB3jPRcavR8nxYZB1SlXismTfMZyGtBFzDHmBt0", "2WEttFIiHPJ7AzKffCEkXsG81mOxBlZvsq15mnQl");
+        /*ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            CurrentUser.setUsername(currentUser.getUsername());
+            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }*/
     }
 
     @Override
@@ -101,6 +110,12 @@ public class SignUpActivity extends ActionBarActivity {
                 ParseUser user = new ParseUser();
                 user.setUsername(username.toLowerCase());
                 user.setPassword(password);
+
+                //for checking special characters
+                Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(username);
+                boolean b = m.find();
+
                 //sign up info checking
                 if (!password.equals(confirmPassword)) {
                     Toast.makeText(getApplicationContext(),
@@ -110,13 +125,17 @@ public class SignUpActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(),
                             "Username cannot contain spaces.", Toast.LENGTH_LONG)
                             .show();
-                } else if (username.length() < 8) {
+                } else if (username.length() < 6) {
                     Toast.makeText(getApplicationContext(),
-                            "Username must be atleast 8 characters.", Toast.LENGTH_LONG)
+                            "Username must be atleast 6 characters.", Toast.LENGTH_LONG)
                             .show();
-                } else if (password.length() < 8) {
+                } else if (password.length() < 6) {
                     Toast.makeText(getApplicationContext(),
-                            "Password must be atleast 8 characters.", Toast.LENGTH_LONG)
+                            "Password must be atleast 6 characters.", Toast.LENGTH_LONG)
+                            .show();
+                } else if (b) {
+                    Toast.makeText(getApplicationContext(),
+                            "Usernames may only consist of letters and numbers.", Toast.LENGTH_LONG)
                             .show();
                 } else {
                     user.signUpInBackground(new SignUpCallback() {

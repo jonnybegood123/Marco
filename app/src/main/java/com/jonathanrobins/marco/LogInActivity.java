@@ -18,17 +18,14 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
-import java.text.ParseException;
-
-
 public class LogInActivity extends ActionBarActivity {
 
-    TextView logInTitle;
-    EditText usernameTextField;
-    EditText passwordTextField;
-    Button logInButton;
-    Button signUpButton;
-    RelativeLayout mainLayout;
+    private TextView logInTitle;
+    private EditText usernameTextField;
+    private EditText passwordTextField;
+    private Button logInButton;
+    private Button signUpButton;
+    private RelativeLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +94,7 @@ public class LogInActivity extends ActionBarActivity {
                     public void done(ParseUser parseUser, com.parse.ParseException e) {
                         if (parseUser != null) {
                             Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                            CurrentUser.setUsername(username);
                             startActivity(intent);
                             finish();
                         } else {

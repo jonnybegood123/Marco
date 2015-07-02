@@ -7,4 +7,5 @@
     <string name="log_in_text"><u>Already have an account? Log in!</u></string>
     <string name="title_activity_log_in">LogInActivity</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="title_activity_add_afriend">AddAFriendActivity</string>
 </resources>
