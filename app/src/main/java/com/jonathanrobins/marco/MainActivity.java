@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
         titleTextView = (TextView) findViewById(R.id.titleTextView);
 
         //title logic
-        titleTextView.setText("Hey " + CurrentUser.getUsername().toUpperCase() + "!");
+        titleTextView.setText(CurrentUser.getUsername().toUpperCase() + " !");
 
         //typography logic
         Typeface typeface = Typeface.createFromAsset(getAssets(), "PlayfairDisplaySC-Italic.ttf");
@@ -90,7 +90,6 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddAFriendActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }

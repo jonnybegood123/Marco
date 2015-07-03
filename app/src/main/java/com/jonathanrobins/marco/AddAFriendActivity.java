@@ -1,5 +1,6 @@
 package com.jonathanrobins.marco;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.Parse;
 
@@ -102,7 +104,10 @@ public class AddAFriendActivity extends ActionBarActivity {
 
         addAFriendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                System.out.println("AYYY LMAO");
+                finish();
+                Toast.makeText(getApplicationContext(),
+                        "Person has been added to your friends list!",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
