@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
-    //private Button marcoButton;
+    private Button marcoButton;
     private Button addAFriendButton;
     private Button settingsButton;
     private TextView titleTextView;
@@ -45,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         //references logic
-        //marcoButton = (Button) findViewById(R.id.marcoButton);
+        marcoButton = (Button) findViewById(R.id.marcoButton);
         addAFriendButton = (Button) findViewById(R.id.addAFriendButton);
         settingsButton = (Button) findViewById(R.id.settingsButton);
         titleTextView = (TextView) findViewById(R.id.titleTextView);
@@ -56,10 +56,10 @@ public class MainActivity extends ActionBarActivity {
 
         //typography logic
         Typeface typeface = Typeface.createFromAsset(getAssets(), "PlayfairDisplaySC-Italic.ttf");
-        //marcoButton.setTypeface(typeface);
+        marcoButton.setTypeface(typeface);
         typeface = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
         addAFriendButton.setTypeface(typeface);
-        //mp = MediaPlayer.create(this, R.raw.marco);
+        mp = MediaPlayer.create(this, R.raw.marco);
 
         //load friends list
         ArrayList<RowItem> list = new ArrayList<RowItem>();
@@ -98,7 +98,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void focusAndOnClickLogic() {
-        /*marcoButton.setOnClickListener(new View.OnClickListener() {
+        marcoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mp.start();
 
@@ -107,7 +107,7 @@ public class MainActivity extends ActionBarActivity {
                 testObject.put("Person", CurrentUser.getUsername());
                 testObject.saveInBackground();
             }
-        });*/
+        });
         addAFriendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddAFriendActivity.class);
