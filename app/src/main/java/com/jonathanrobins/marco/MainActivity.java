@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.Parse;
@@ -17,13 +19,16 @@ import com.parse.ParseObject;
 import org.w3c.dom.Text;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
-    private Button marcoButton;
+    //private Button marcoButton;
     private Button addAFriendButton;
+    private Button settingsButton;
     private TextView titleTextView;
     private MediaPlayer mp;
+    private ListView friendsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,23 +36,41 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
+        //checks if logging out
+        boolean finish = getIntent().getBooleanExtra("finish", false);
+        if (finish) {
+            startActivity(new Intent(MainActivity.this, LogInActivity.class));
+            finish();
+            return;
+        }
+
         //references logic
-        marcoButton = (Button) findViewById(R.id.marcoButton);
+        //marcoButton = (Button) findViewById(R.id.marcoButton);
         addAFriendButton = (Button) findViewById(R.id.addAFriendButton);
+        settingsButton = (Button) findViewById(R.id.settingsButton);
         titleTextView = (TextView) findViewById(R.id.titleTextView);
+        friendsList = (ListView) findViewById(R.id.friendsList);
 
         //title logic
         titleTextView.setText(CurrentUser.getUsername().toUpperCase() + " !");
 
         //typography logic
         Typeface typeface = Typeface.createFromAsset(getAssets(), "PlayfairDisplaySC-Italic.ttf");
-        marcoButton.setTypeface(typeface);
+        //marcoButton.setTypeface(typeface);
         typeface = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
         addAFriendButton.setTypeface(typeface);
-        mp = MediaPlayer.create(this, R.raw.marco);
+        //mp = MediaPlayer.create(this, R.raw.marco);
 
-        //database
-        Parse.initialize(this, "UqB3jPRcavR8nxYZB1SlXismTfMZyGtBFzDHmBt0", "2WEttFIiHPJ7AzKffCEkXsG81mOxBlZvsq15mnQl");
+        //load friends list
+        ArrayList<RowItem> list = new ArrayList<RowItem>();
+        RowItem rowItem1 = new RowItem(R.drawable.icon, "Jonathan Robins");
+        list.add(rowItem1);
+        list.add(rowItem1);
+        list.add(rowItem1);
+        list.add(rowItem1);
+        list.add(rowItem1);
+        CustomListViewAdapter adapter = new CustomListViewAdapter(this, R.layout.simplerow, list);
+        friendsList.setAdapter(adapter);
 
         focusAndOnClickLogic();
     }
@@ -75,7 +98,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void focusAndOnClickLogic() {
-        marcoButton.setOnClickListener(new View.OnClickListener() {
+        /*marcoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mp.start();
 
@@ -84,11 +107,16 @@ public class MainActivity extends ActionBarActivity {
                 testObject.put("Person", CurrentUser.getUsername());
                 testObject.saveInBackground();
             }
-        });
-
+        });*/
         addAFriendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddAFriendActivity.class);
+                startActivity(intent);
+            }
+        });
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
         });

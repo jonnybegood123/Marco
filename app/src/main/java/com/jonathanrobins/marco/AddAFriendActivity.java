@@ -24,6 +24,7 @@ public class AddAFriendActivity extends ActionBarActivity {
     private RelativeLayout mainLayout;
     private TextView titleText;
     private EditText enterFriendsUsernameTextField;
+    private Button backButton;
     private Button addAFriendButton;
 
     @Override
@@ -37,14 +38,12 @@ public class AddAFriendActivity extends ActionBarActivity {
         titleText = (TextView) findViewById(R.id.titleTextView);
         enterFriendsUsernameTextField = (EditText) findViewById(R.id.enterFriendsUsernameTextField);
         addAFriendButton = (Button) findViewById(R.id.addAFriendButton);
+        backButton = (Button) findViewById(R.id.backButton);
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
         titleText.setTypeface(typeface);
         enterFriendsUsernameTextField.setTypeface(typeface);
         addAFriendButton.setTypeface(typeface);
-
-        //database
-        Parse.initialize(this, "UqB3jPRcavR8nxYZB1SlXismTfMZyGtBFzDHmBt0", "2WEttFIiHPJ7AzKffCEkXsG81mOxBlZvsq15mnQl");
 
         addAFriendButton.setVisibility(View.INVISIBLE);
         enterFriendsUsernameTextField.addTextChangedListener(filterTextWatcher);
@@ -101,7 +100,11 @@ public class AddAFriendActivity extends ActionBarActivity {
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }
         });
-
+        backButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
         addAFriendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 finish();

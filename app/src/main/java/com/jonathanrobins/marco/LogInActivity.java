@@ -51,9 +51,6 @@ public class LogInActivity extends ActionBarActivity {
 
         //on click/focus methods
         focusAndOnClickLogic();
-
-        //database
-        Parse.initialize(this, "UqB3jPRcavR8nxYZB1SlXismTfMZyGtBFzDHmBt0", "2WEttFIiHPJ7AzKffCEkXsG81mOxBlZvsq15mnQl");
     }
 
     @Override
@@ -110,6 +107,7 @@ public class LogInActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LogInActivity.this, SignUpActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

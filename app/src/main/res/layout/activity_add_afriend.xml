@@ -8,12 +8,19 @@
     android:background="#0893C3"
     android:id="@+id/mainLayout">
 
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/backButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter your friend&apos;s username:"
+        android:text="Enter your friend's username:"
         android:id="@+id/titleTextView"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="80dp"
         android:textColor="@android:color/white"
         android:textSize="20dp"
         android:layout_alignParentTop="true"
@@ -31,7 +38,7 @@
         android:layout_below="@+id/titleTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="35dp" />
 
     <Button
         android:layout_width="match_parent"
@@ -40,7 +47,7 @@
         android:id="@+id/addAFriendButton"
         android:layout_below="@+id/enterFriendsUsernameTextField"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="35dp"
         android:background="#ffff8045"
         android:textSize="20dp" />
 </RelativeLayout>

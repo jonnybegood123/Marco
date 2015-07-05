@@ -61,16 +61,14 @@ public class SignUpActivity extends ActionBarActivity {
         //set focus/click methods
         focusAndOnClickLogic();
 
-        //database
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "UqB3jPRcavR8nxYZB1SlXismTfMZyGtBFzDHmBt0", "2WEttFIiHPJ7AzKffCEkXsG81mOxBlZvsq15mnQl");
-        /*ParseUser currentUser = ParseUser.getCurrentUser();
+        //check if user already logged in
+        ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             CurrentUser.setUsername(currentUser.getUsername());
             Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        }*/
+        }
     }
 
     @Override
@@ -163,6 +161,7 @@ public class SignUpActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
