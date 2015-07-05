@@ -4,6 +4,6 @@
      <color name="blue">#00f</color>
      <color name="red">#f00</color>
      <color name="white">#FFFFFF</color>
-     <color name="darkerwhite">#FFDCD0CB</color>
-     <color name="lightwhite">#FFF2EFDE</color>
+     <color name="darkerMarco">#FFFFD829</color>
+     <color name="lighterMarco">#fffff345</color>
 </resources>
