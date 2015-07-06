@@ -61,7 +61,6 @@ public class MainActivity extends ActionBarActivity {
         mp = MediaPlayer.create(this, R.raw.marco);
 
         //friends list configurations
-        friendsList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         ArrayList<RowItem> list = new ArrayList<RowItem>();
         RowItem rowItem1 = new RowItem(R.drawable.icon, "Jonathan Robins", R.drawable.icon);
         list.add(rowItem1);

@@ -52,11 +52,12 @@
         android:layout_height="300dp"
         android:id="@+id/friendsList"
         android:layout_below="@+id/view"
-        android:background="#fffff0da"
+        android:choiceMode="multipleChoice"
+        android:listSelector="#ffedeae2"
+        android:background="#fffffbe4"
         android:layout_marginTop="30dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
 
     <Button
         android:layout_width="match_parent"
