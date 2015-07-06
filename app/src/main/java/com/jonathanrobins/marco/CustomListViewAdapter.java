@@ -16,6 +16,7 @@ import android.widget.TextView;
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
     Context context;
+    int[] selectedRowsItems;
 
     public CustomListViewAdapter(Context context, int resourceId,
                                  List<RowItem> items) {
@@ -26,8 +27,8 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
     /*private view holder class*/
     private class ViewHolder {
         ImageView imageView;
-        TextView txtTitle;
         TextView txtDesc;
+        ImageView checkbox;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -37,17 +38,20 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.simplerow, null);
+            convertView = mInflater.inflate(R.layout.row_item, null);
             holder = new ViewHolder();
             holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
-            holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
             holder.imageView = (ImageView) convertView.findViewById(R.id.icon);
+            holder.checkbox = (ImageView) convertView.findViewById(R.id.checkbox);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
 
         holder.txtDesc.setText(rowItem.getDesc());
         holder.imageView.setImageResource(rowItem.getImageId());
+        if(selectedRowsItems[position] == 0) {
+            holder.checkbox.setImageResource(rowItem.getCheckbox());
+        }
 
         return convertView;
     }

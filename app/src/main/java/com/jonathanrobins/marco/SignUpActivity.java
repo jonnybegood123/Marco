@@ -127,7 +127,13 @@ public class SignUpActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(),
                             "Username must be atleast 6 characters.", Toast.LENGTH_LONG)
                             .show();
-                } else if (password.length() < 6) {
+                }
+                else if (username.length() > 20) {
+                    Toast.makeText(getApplicationContext(),
+                            "Username cannot be greater than 20 characters.", Toast.LENGTH_LONG)
+                            .show();
+                }
+                else if (password.length() < 6) {
                     Toast.makeText(getApplicationContext(),
                             "Password must be atleast 6 characters.", Toast.LENGTH_LONG)
                             .show();

@@ -6,6 +6,7 @@
      android:id="@+id/icon"
      android:layout_width="80dp"
      android:layout_height="80dp"
+     android:layout_centerVertical = "true"
      android:paddingLeft="10dp"
      android:paddingRight="10dp" />
 
@@ -18,4 +19,13 @@
      android:paddingLeft="10dp"
      android:textColor="#3399FF"
      android:textSize="20dp" />
+
+    <ImageView
+        android:id="@+id/checkbox"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_toRightOf="@+id/desc"
+        android:layout_centerVertical = "true"
+        android:paddingLeft="30dp"
+        android:paddingRight="10dp" />
 </RelativeLayout>

@@ -6,10 +6,12 @@ package com.jonathanrobins.marco;
 public class RowItem {
     private int imageId;
     private String name;
+    private int checkbox;
 
-    public RowItem(int imageId, String name) {
+    public RowItem(int imageId, String name, int imageId2) {
         this.imageId = imageId;
         this.name = name;
+        this.checkbox = imageId2;
     }
     public int getImageId() {
         return imageId;
@@ -22,6 +24,12 @@ public class RowItem {
     }
     public void setDesc(String desc) {
         this.name = name;
+    }
+    public int getCheckbox() {
+        return checkbox;
+    }
+    public void setCheckbox(int checkbox) {
+        this.checkbox = checkbox;
     }
     @Override
     public String toString() {

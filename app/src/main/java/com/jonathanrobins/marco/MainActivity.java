@@ -8,17 +8,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.parse.Parse;
 import com.parse.ParseObject;
 
-import org.w3c.dom.Text;
-
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
@@ -29,6 +27,7 @@ public class MainActivity extends ActionBarActivity {
     private TextView titleTextView;
     private MediaPlayer mp;
     private ListView friendsList;
+    private CustomListViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +60,17 @@ public class MainActivity extends ActionBarActivity {
         addAFriendButton.setTypeface(typeface);
         mp = MediaPlayer.create(this, R.raw.marco);
 
-        //load friends list
+        //friends list configurations
+        friendsList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         ArrayList<RowItem> list = new ArrayList<RowItem>();
-        RowItem rowItem1 = new RowItem(R.drawable.icon, "Jonathan Robins");
+        RowItem rowItem1 = new RowItem(R.drawable.icon, "Jonathan Robins", R.drawable.icon);
         list.add(rowItem1);
         list.add(rowItem1);
         list.add(rowItem1);
         list.add(rowItem1);
         list.add(rowItem1);
-        CustomListViewAdapter adapter = new CustomListViewAdapter(this, R.layout.simplerow, list);
+        adapter = new CustomListViewAdapter(this, R.layout.row_item, list);
+        adapter.selectedRowsItems = new int[list.size()];
         friendsList.setAdapter(adapter);
 
         focusAndOnClickLogic();
@@ -118,6 +119,28 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                //ListEntry entry = (ListEntry) parent.getItemAtPosition(position);
+
+                //retrieve row item parent layout
+                RelativeLayout layoutParent = (RelativeLayout) view;
+                //retrieve checkbox imageview from layout
+                ImageView checkbox = (ImageView) layoutParent.getChildAt(2);
+
+                //set checkbox. If 0, unselected. If 1, selected.
+                if (adapter.selectedRowsItems[position] == 0) {
+                    checkbox.setImageResource(R.drawable.pepeicon);
+                    adapter.selectedRowsItems[position] = 1;
+                } else {
+                    checkbox.setImageResource(R.drawable.icon);
+                    adapter.selectedRowsItems[position] = 0;
+                }
             }
         });
     }
