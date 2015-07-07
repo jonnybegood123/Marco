@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -105,7 +107,6 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 mp.start();
 
-                java.util.Date date = new java.util.Date();
                 ParseObject testObject = new ParseObject("Test");
                 testObject.put("Person", CurrentUser.getUsername());
                 testObject.saveInBackground();
