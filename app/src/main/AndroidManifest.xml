@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddAFriendActivity"
+            android:name=".FriendsActivity"
             android:label="@string/title_activity_add_afriend"
             android:windowSoftInputMode="stateVisible" >
         </activity>

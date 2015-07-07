@@ -1,6 +1,5 @@
 package com.jonathanrobins.marco;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -16,10 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.Parse;
 
-
-public class AddAFriendActivity extends ActionBarActivity {
+public class FriendsActivity extends ActionBarActivity {
 
     private RelativeLayout mainLayout;
     private TextView titleText;
@@ -31,7 +28,7 @@ public class AddAFriendActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_add_afriend);
+        setContentView(R.layout.activity_friends);
 
         //references
         mainLayout = (RelativeLayout) findViewById(R.id.mainLayout);

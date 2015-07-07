@@ -68,6 +68,9 @@ public class MainActivity extends ActionBarActivity {
         list.add(rowItem1);
         list.add(rowItem1);
         list.add(rowItem1);
+        list.add(rowItem1);
+        list.add(rowItem1);
+        list.add(rowItem1);
         adapter = new CustomListViewAdapter(this, R.layout.row_item, list);
         adapter.selectedRowsItems = new int[list.size()];
         friendsList.setAdapter(adapter);
@@ -110,7 +113,7 @@ public class MainActivity extends ActionBarActivity {
         });
         addAFriendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddAFriendActivity.class);
+                Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
                 startActivity(intent);
             }
         });

@@ -1,5 +1,7 @@
 package com.jonathanrobins.marco;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -24,9 +26,9 @@ public class SettingsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_settings);
 
         //references
-        backButton = (Button)findViewById(R.id.backButton);
-        resetPasswordButton = (Button)findViewById(R.id.resetPasswordButton);
-        logOutButton = (Button)findViewById(R.id.logOutButton);
+        backButton = (Button) findViewById(R.id.backButton);
+        resetPasswordButton = (Button) findViewById(R.id.resetPasswordButton);
+        logOutButton = (Button) findViewById(R.id.logOutButton);
 
         focusAndOnClickLogic();
     }
@@ -68,14 +70,35 @@ public class SettingsActivity extends ActionBarActivity {
 
         logOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ParseUser.logOut();
-                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-                intent.putExtra("finish", true);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
+                backDialog();
             }
         });
 
+    }
+
+    public void backDialog() {
+        new AlertDialog.Builder(this)
+                .setCancelable(false)
+                        //.setTitle("Are you sure you want to log out?")
+                .setMessage("Are you sure you want to log out?")
+                        //yes
+                .setPositiveButton("Yes!", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ParseUser.logOut();
+                        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                        intent.putExtra("finish", true);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                        //no
+                .setNegativeButton("No.", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //stays
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
