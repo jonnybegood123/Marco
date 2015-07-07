@@ -84,7 +84,7 @@ public class LogInActivity extends ActionBarActivity {
         });
         logInButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final String username = usernameTextField.getText().toString();
+                final String username = usernameTextField.getText().toString().trim();
                 final String password = passwordTextField.getText().toString();
                 ParseUser.logInInBackground(username.toLowerCase(), password, new LogInCallback() {
                     @Override
