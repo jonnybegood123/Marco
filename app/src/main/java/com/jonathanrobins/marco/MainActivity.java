@@ -15,11 +15,16 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -55,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
         //title logic
         titleTextView.setText(CurrentUser.getUsername().toUpperCase() + " !");
 
-        //typography logic
+        //typography
         Typeface typeface = Typeface.createFromAsset(getAssets(), "PlayfairDisplaySC-Italic.ttf");
         marcoButton.setTypeface(typeface);
         typeface = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
@@ -110,6 +115,16 @@ public class MainActivity extends ActionBarActivity {
                 ParseObject testObject = new ParseObject("Test");
                 testObject.put("Person", CurrentUser.getUsername());
                 testObject.saveInBackground();
+
+                final ParseUser currentUser = ParseUser.getCurrentUser();
+                final String friendsUsername = "Howdy";
+
+                final ParseObject friend = new ParseObject("Friends");
+                friend.put("username", friendsUsername);
+
+                ParseRelation relation = currentUser.getRelation("Friends");
+                relation.add(friend);
+                currentUser.saveInBackground();
             }
         });
         addAFriendButton.setOnClickListener(new View.OnClickListener() {
