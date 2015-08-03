@@ -1,5 +1,6 @@
 package com.jonathanrobins.marco;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,6 +15,15 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.ParseACL;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.List;
 
 
 public class FriendsActivity extends ActionBarActivity {
@@ -104,6 +114,54 @@ public class FriendsActivity extends ActionBarActivity {
         });
         addAFriendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                //finds user with username entered in
+                ParseQuery<ParseUser> query = ParseUser.getQuery();
+                query.whereEqualTo("username", enterFriendsUsernameTextField.getText().toString().trim().toLowerCase());
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    public void done(final List<ParseUser> users, ParseException e) {
+                        if (e == null) {
+
+                            //finds friends of entered user
+                            ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendsList");
+                            query.whereEqualTo("friends", users.get(0));
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                public void done(List<ParseObject> friends, ParseException e) {
+                                    if (e == null) {
+                                        if (friends.size() == 0) {
+                                            ParseUser currentUser = ParseUser.getCurrentUser();
+
+                                            //ACL
+                                            ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
+                                            postACL.setPublicReadAccess(false);
+                                            postACL.setPublicWriteAccess(false);
+                                            postACL.setReadAccess(currentUser, true);
+                                            postACL.setWriteAccess(currentUser, true);
+                                            postACL.setReadAccess(users.get(0), true);
+                                            postACL.setWriteAccess(users.get(0), true);
+
+                                            //add friend connection for users
+                                            ParseObject friendsList = new ParseObject("FriendsList");
+                                            friendsList.put("friend1", currentUser);
+                                            friendsList.put("friend2", users.get(0));
+                                            friendsList.setACL(postACL);
+
+                                            try {
+                                                friendsList.save();
+                                            } catch (ParseException e2) {
+                                                //   e.printStackTrace();
+                                            }
+                                        }
+
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+                });
+                Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
+                startActivity(intent);
                 finish();
                 Toast.makeText(getApplicationContext(),
                         "Person has been added to your friends list!",

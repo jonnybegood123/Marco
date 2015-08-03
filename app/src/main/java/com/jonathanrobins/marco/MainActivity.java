@@ -3,6 +3,7 @@ package com.jonathanrobins.marco;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,9 +20,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +42,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //checks if logging out
-        boolean finish = getIntent().getBooleanExtra("finish", false);
-        if (finish) {
+        boolean intentSetting = getIntent().getBooleanExtra("finish", false);
+        if (intentSetting) {
             startActivity(new Intent(MainActivity.this, LogInActivity.class));
             finish();
             return;
@@ -68,19 +67,49 @@ public class MainActivity extends ActionBarActivity {
         mp = MediaPlayer.create(this, R.raw.marco);
 
         //friends list configurations
-        ArrayList<RowItem> list = new ArrayList<RowItem>();
-        RowItem rowItem1 = new RowItem(R.drawable.icon, "Jonathan Robins", R.drawable.icon);
+
+        /*
+        RowItem rowItem = new RowItem(R.drawable.icon, "Jonathan Robins", R.drawable.icon);
         list.add(rowItem1);
         list.add(rowItem1);
         list.add(rowItem1);
         list.add(rowItem1);
         list.add(rowItem1);
         list.add(rowItem1);
-        list.add(rowItem1);
-        list.add(rowItem1);
-        adapter = new CustomListViewAdapter(this, R.layout.row_item, list);
-        adapter.selectedRowsItems = new int[list.size()];
-        friendsList.setAdapter(adapter);
+        list.add(rowItem1);*/
+
+        //find friend relations from FriendsList class and add them
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendsList");
+        query.include("friend1");
+        query.include("friend2");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> friends, ParseException e) {
+                if (e == null) {
+                    ArrayList<RowItem> list = new ArrayList<RowItem>();
+                    for (ParseObject friend : friends) {
+                        ParseUser user1 = (ParseUser) friend.get("friend1");
+                        String userName1 = user1.getUsername();
+                        ParseUser user2 = (ParseUser) friend.get("friend2");
+                        String userName2 = user2.getUsername();
+
+                        if (!userName1.equals(ParseUser.getCurrentUser().getUsername())) {
+                            RowItem rowItem = new RowItem(R.drawable.icon, userName1, R.drawable.icon);
+                            list.add(rowItem);
+                        }
+                        if (!userName2.equals(ParseUser.getCurrentUser().getUsername())) {
+                            RowItem rowItem = new RowItem(R.drawable.icon, userName2, R.drawable.icon);
+                            list.add(rowItem);
+                        }
+
+                    }
+                    System.out.println("LOL");
+                    adapter = new CustomListViewAdapter(MainActivity.this, R.layout.row_item, list);
+                    adapter.selectedRowsItems = new int[list.size()];
+                    friendsList.setAdapter(adapter);
+                }
+            }
+        });
+
 
         focusAndOnClickLogic();
     }
@@ -115,16 +144,6 @@ public class MainActivity extends ActionBarActivity {
                 ParseObject testObject = new ParseObject("Test");
                 testObject.put("Person", CurrentUser.getUsername());
                 testObject.saveInBackground();
-
-                final ParseUser currentUser = ParseUser.getCurrentUser();
-                final String friendsUsername = "Howdy";
-
-                final ParseObject friend = new ParseObject("Friends");
-                friend.put("username", friendsUsername);
-
-                ParseRelation relation = currentUser.getRelation("Friends");
-                relation.add(friend);
-                currentUser.saveInBackground();
             }
         });
         addAFriendButton.setOnClickListener(new View.OnClickListener() {

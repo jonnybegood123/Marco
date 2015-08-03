@@ -15,7 +15,7 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Parse.enableLocalDatastore(this);
+        //Parse.enableLocalDatastore(this);
         Parse.initialize(this, "UqB3jPRcavR8nxYZB1SlXismTfMZyGtBFzDHmBt0", "2WEttFIiHPJ7AzKffCEkXsG81mOxBlZvsq15mnQl");
     }
 }
