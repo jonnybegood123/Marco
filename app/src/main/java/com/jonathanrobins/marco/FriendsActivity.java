@@ -23,6 +23,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -114,60 +115,98 @@ public class FriendsActivity extends ActionBarActivity {
         });
         addAFriendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                //finds user with username entered in
                 ParseQuery<ParseUser> query = ParseUser.getQuery();
-                query.whereEqualTo("username", enterFriendsUsernameTextField.getText().toString().trim().toLowerCase());
-                query.findInBackground(new FindCallback<ParseUser>() {
-                    public void done(final List<ParseUser> users, ParseException e) {
-                        if (e == null) {
+                String friendToAdd = enterFriendsUsernameTextField.getText().toString().trim().toLowerCase();
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                //checks that you didn't enter your own name
+                if (!currentUser.getUsername().equalsIgnoreCase(friendToAdd)) {
+                    //finds user with username entered in
+                    query.whereEqualTo("username", friendToAdd);
+                    query.findInBackground(new FindCallback<ParseUser>() {
+                        public void done(final List<ParseUser> users, ParseException e) {
+                            if (e == null) {
+                                if (users.size() > 0) {
+                                    //finds friends of entered user
+                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendsList");
+                                    query.whereEqualTo("friends", users.get(0));
+                                    query.findInBackground(new FindCallback<ParseObject>() {
+                                        public void done(List<ParseObject> friends, ParseException e) {
+                                            if (e == null) {
+                                                if (friends.size() == 0) {
+                                                    //check that they're not already friends
+                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendsList");
+                                                    query.include("friend1");
+                                                    query.include("friend2");
+                                                    query.findInBackground(new FindCallback<ParseObject>() {
+                                                        public void done(List<ParseObject> friendsList, ParseException e) {
+                                                            boolean alreadyFriends = false;
+                                                            ParseUser currentUser = ParseUser.getCurrentUser();
+                                                            //ACL
+                                                            ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
+                                                            postACL.setPublicReadAccess(false);
+                                                            postACL.setPublicWriteAccess(false);
+                                                            postACL.setReadAccess(currentUser, true);
+                                                            postACL.setWriteAccess(currentUser, true);
+                                                            postACL.setReadAccess(users.get(0), true);
+                                                            postACL.setWriteAccess(users.get(0), true);
+                                                            if (e == null) {
+                                                                for (ParseObject friend : friendsList) {
+                                                                    ParseUser user1 = (ParseUser) friend.get("friend1");
+                                                                    String userName1 = user1.getUsername();
+                                                                    ParseUser user2 = (ParseUser) friend.get("friend2");
+                                                                    String userName2 = user2.getUsername();
+                                                                    if (((userName1.equalsIgnoreCase(currentUser.getUsername()) && userName2.equalsIgnoreCase(users.get(0).getUsername()))
+                                                                            ||
+                                                                            (userName1.equalsIgnoreCase(users.get(0).getUsername()) && userName2.equalsIgnoreCase(currentUser.getUsername())))) {
+                                                                        alreadyFriends = true;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                if (!alreadyFriends) {
+                                                                    //add new friend relation for users if not already friends
+                                                                    ParseObject newFriendRelation = new ParseObject("FriendsList");
+                                                                    newFriendRelation.put("friend1", currentUser);
+                                                                    newFriendRelation.put("friend2", users.get(0));
+                                                                    newFriendRelation.setACL(postACL);
 
-                            //finds friends of entered user
-                            ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendsList");
-                            query.whereEqualTo("friends", users.get(0));
-                            query.findInBackground(new FindCallback<ParseObject>() {
-                                public void done(List<ParseObject> friends, ParseException e) {
-                                    if (e == null) {
-                                        if (friends.size() == 0) {
-                                            ParseUser currentUser = ParseUser.getCurrentUser();
-
-                                            //ACL
-                                            ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
-                                            postACL.setPublicReadAccess(false);
-                                            postACL.setPublicWriteAccess(false);
-                                            postACL.setReadAccess(currentUser, true);
-                                            postACL.setWriteAccess(currentUser, true);
-                                            postACL.setReadAccess(users.get(0), true);
-                                            postACL.setWriteAccess(users.get(0), true);
-
-                                            //add friend connection for users
-                                            ParseObject friendsList = new ParseObject("FriendsList");
-                                            friendsList.put("friend1", currentUser);
-                                            friendsList.put("friend2", users.get(0));
-                                            friendsList.setACL(postACL);
-
-                                            try {
-                                                friendsList.save();
-                                            } catch (ParseException e2) {
-                                                //   e.printStackTrace();
+                                                                    try {
+                                                                        newFriendRelation.save();
+                                                                        Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
+                                                                        startActivity(intent);
+                                                                        finish();
+                                                                        Toast.makeText(getApplicationContext(),
+                                                                                "Person has been added to your friends list!",
+                                                                                Toast.LENGTH_LONG).show();
+                                                                    } catch (ParseException e2) {
+                                                                        //   e.printStackTrace();
+                                                                    }
+                                                                } else {
+                                                                    Toast.makeText(getApplicationContext(),
+                                                                            "User is already added to your friends list!",
+                                                                            Toast.LENGTH_LONG).show();
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
                                             }
                                         }
-
-                                    }
+                                    });
                                 }
-                            });
-
+                                else{
+                                    Toast.makeText(getApplicationContext(),
+                                            "Couldn't find user you're looking for.",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
                         }
-                    }
-                });
-                Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                Toast.makeText(getApplicationContext(),
-                        "Person has been added to your friends list!",
-                        Toast.LENGTH_LONG).show();
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "You can't add yourself to your friends list, silly!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
-
 }

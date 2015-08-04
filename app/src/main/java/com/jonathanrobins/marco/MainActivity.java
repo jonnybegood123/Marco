@@ -83,10 +83,10 @@ public class MainActivity extends ActionBarActivity {
         query.include("friend1");
         query.include("friend2");
         query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> friends, ParseException e) {
+            public void done(List<ParseObject> friendsList, ParseException e) {
                 if (e == null) {
                     ArrayList<RowItem> list = new ArrayList<RowItem>();
-                    for (ParseObject friend : friends) {
+                    for (ParseObject friend : friendsList) {
                         ParseUser user1 = (ParseUser) friend.get("friend1");
                         String userName1 = user1.getUsername();
                         ParseUser user2 = (ParseUser) friend.get("friend2");
@@ -102,15 +102,14 @@ public class MainActivity extends ActionBarActivity {
                         }
 
                     }
-                    System.out.println("LOL");
                     adapter = new CustomListViewAdapter(MainActivity.this, R.layout.row_item, list);
                     adapter.selectedRowsItems = new int[list.size()];
-                    friendsList.setAdapter(adapter);
+                    MainActivity.this.friendsList.setAdapter(adapter);
                 }
             }
         });
 
-
+        marcoButton.setEnabled(false);
         focusAndOnClickLogic();
     }
 
@@ -144,6 +143,15 @@ public class MainActivity extends ActionBarActivity {
                 ParseObject testObject = new ParseObject("Test");
                 testObject.put("Person", CurrentUser.getUsername());
                 testObject.saveInBackground();
+                ArrayList<String> list = new ArrayList<String>();
+                for(int i = 0; i < adapter.selectedRowsItems.length; i++){
+                    if(adapter.selectedRowsItems[i] == 1){
+                        list.add(friendsList.getItemAtPosition(i).toString());
+                    }
+                }
+                Intent intent = new Intent(MainActivity.this, SendMarcoActivity.class);
+                intent.putStringArrayListExtra("list", list);
+                startActivity(intent);
             }
         });
         addAFriendButton.setOnClickListener(new View.OnClickListener() {
@@ -164,19 +172,24 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 //ListEntry entry = (ListEntry) parent.getItemAtPosition(position);
-
                 //retrieve row item parent layout
                 RelativeLayout layoutParent = (RelativeLayout) view;
                 //retrieve checkbox imageview from layout
                 ImageView checkbox = (ImageView) layoutParent.getChildAt(2);
-
                 //set checkbox. If 0, unselected. If 1, selected.
                 if (adapter.selectedRowsItems[position] == 0) {
-                    checkbox.setImageResource(R.drawable.pepeicon);
+                    checkbox.setImageResource(R.drawable.check);
                     adapter.selectedRowsItems[position] = 1;
+                    marcoButton.setEnabled(true);
                 } else {
                     checkbox.setImageResource(R.drawable.icon);
                     adapter.selectedRowsItems[position] = 0;
+                    marcoButton.setEnabled(false);
+                    for(int friend: adapter.selectedRowsItems){
+                        if(friend == 1){
+                            marcoButton.setEnabled(true);
+                        }
+                    }
                 }
             }
         });
