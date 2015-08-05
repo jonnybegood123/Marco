@@ -23,6 +23,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
@@ -85,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> friendsList, ParseException e) {
                 if (e == null) {
-                    ArrayList<RowItem> list = new ArrayList<RowItem>();
+                    List<RowItem> list = new ArrayList<RowItem>();
                     for (ParseObject friend : friendsList) {
                         ParseUser user1 = (ParseUser) friend.get("friend1");
                         String userName1 = user1.getUsername();
@@ -102,6 +104,13 @@ public class MainActivity extends ActionBarActivity {
                         }
 
                     }
+                    Collections.sort(list, new Comparator<RowItem>() {
+                        @Override
+                        public int compare(RowItem rowItem1, RowItem rowItem2) {
+
+                            return rowItem1.getDesc().compareTo(rowItem2.getDesc());
+                        }
+                    });
                     adapter = new CustomListViewAdapter(MainActivity.this, R.layout.row_item, list);
                     adapter.selectedRowsItems = new int[list.size()];
                     MainActivity.this.friendsList.setAdapter(adapter);
